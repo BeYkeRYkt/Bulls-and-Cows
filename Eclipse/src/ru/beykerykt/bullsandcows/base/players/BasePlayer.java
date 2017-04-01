@@ -24,6 +24,7 @@
 package ru.beykerykt.bullsandcows.base.players;
 
 import ru.beykerykt.bullsandcows.base.gui.IUserInterface;
+import ru.beykerykt.bullsandcows.base.utils.GameUtils;
 
 public abstract class BasePlayer {
 
@@ -81,6 +82,10 @@ public abstract class BasePlayer {
 		int bulls = 0;
 		int cows = 0;
 
+		if (guess.length() < GameUtils.CODE_LENGTH) {
+			return bulls + ":" + cows;
+		}
+
 		for (int i = 0; i < getSecretCode().length(); i++) {
 			if (guess.charAt(i) == getSecretCode().charAt(i)) {
 				bulls++;
@@ -102,4 +107,35 @@ public abstract class BasePlayer {
 
 	// Твой ход!
 	protected abstract void nextGuess(BasePlayer player);
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((code == null) ? 0 : code.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BasePlayer other = (BasePlayer) obj;
+		if (code == null) {
+			if (other.code != null)
+				return false;
+		} else if (!code.equals(other.code))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
 }

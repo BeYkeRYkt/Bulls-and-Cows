@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 import ru.beykerykt.bullsandcows.base.players.BasePlayer;
 
-public class BattleArea implements Runnable {
+public class BattleArena implements Runnable {
 
 	private boolean isRunning = false;
 	private boolean isPaused = false;

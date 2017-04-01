@@ -23,14 +23,12 @@
 */
 package ru.beykerykt.bullsandcows.base;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import ru.beykerykt.bullsandcows.base.players.BasePlayer;
-import ru.beykerykt.bullsandcows.base.utils.GameUtils;
+import ru.beykerykt.bullsandcows.base.runnables.PlayerRunnable;
+import ru.beykerykt.bullsandcows.base.runnables.TimerRunnable;
 
 public class BattleArena implements Runnable {
 
@@ -40,9 +38,10 @@ public class BattleArena implements Runnable {
 	// Players
 	private List<BasePlayer> players = new ArrayList<BasePlayer>();
 
-	// Executor
-	private ScheduledFuture<?> timer = null;
-	private int time = -1;
+	// Runnable's
+	private TimerRunnable timerR;
+	private PlayerRunnable playerR;
+	// private ScheduledFuture<?> timer = null;
 
 	//////////////////////////////////////////////////////////////////////
 	//
@@ -58,8 +57,12 @@ public class BattleArena implements Runnable {
 			setRunning(true); // run!
 			setPaused(false); // set false pause
 
-			// Start timer
-			timer = GameUtils.getExecutorService().scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
+			// init runables
+			timerR = new TimerRunnable(this);
+			playerR = new PlayerRunnable(this);
+
+			timerR.start();
+			playerR.start();
 		}
 	}
 
@@ -68,7 +71,9 @@ public class BattleArena implements Runnable {
 			setRunning(false);
 			setPaused(false);
 			// GameUtils.getExecutorService().shutdownNow();
-			timer.cancel(false);
+			// timer.cancel(false);
+			timerR.stop();
+			playerR.stop();
 		}
 	}
 
@@ -124,12 +129,11 @@ public class BattleArena implements Runnable {
 	//
 	/////////////////////////////////////////////////////////////////////
 	public String getTime() {
-		DecimalFormat decimalFormat = new DecimalFormat("00");
-		return decimalFormat.format(time / 60) + ":" + decimalFormat.format(time % 60);
+		return timerR.getTime();
 	}
 
 	public int getTimeRaw() {
-		return time;
+		return timerR.getTimeRaw();
 	}
 
 	//////////////////////////////////////////////////////////////////////
@@ -150,8 +154,6 @@ public class BattleArena implements Runnable {
 	/////////////////////////////////////////////////////////////////////
 	@Override
 	public void run() {
-		if (!isPaused()) {
-			time++;
-		}
+		// TODO: ???
 	}
 }

@@ -23,6 +23,8 @@
 */
 package ru.beykerykt.bullsandcows.base.utils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -30,6 +32,9 @@ import java.util.concurrent.ScheduledExecutorService;
 public class GameUtils {
 
 	private static ScheduledExecutorService es = Executors.newSingleThreadScheduledExecutor();
+	public static int CODE_POWER[] = { 0, 1, 2, 3, 4, 5, 6 };
+	public static int CODE_POWER_LENGTH = CODE_POWER.length - 1;
+	public static int CODE_LENGTH = 4;
 
 	public static String generateRandomCode() {
 		Random rand = new Random();
@@ -49,6 +54,21 @@ public class GameUtils {
 			num /= 10;
 		}
 		return false;
+	}
+
+	public static List<String> getAllCodes(int length) {
+		List<String> list = new ArrayList<String>();
+		for (int i = 0; i < length; i++) {
+			for (int j = 0; j < length; j++) {
+				for (int k = 0; k < length; k++) {
+					for (int l = 0; l < length; l++) {
+						String code = String.valueOf(i + j + k + l);
+						list.add(code);
+					}
+				}
+			}
+		}
+		return list;
 	}
 
 	public static ScheduledExecutorService getExecutorService() {

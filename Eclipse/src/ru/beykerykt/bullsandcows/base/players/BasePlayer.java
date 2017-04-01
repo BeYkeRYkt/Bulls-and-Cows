@@ -23,6 +23,7 @@
 */
 package ru.beykerykt.bullsandcows.base.players;
 
+import ru.beykerykt.bullsandcows.base.BattleArena;
 import ru.beykerykt.bullsandcows.base.gui.IUserInterface;
 import ru.beykerykt.bullsandcows.base.utils.GameUtils;
 
@@ -33,6 +34,7 @@ public abstract class BasePlayer {
 	private IUserInterface gui;
 	private boolean guessed = false;
 	private int guesses = 0;
+	private BattleArena arena;
 
 	public BasePlayer(String name, String code, IUserInterface gui) {
 		this.name = name;
@@ -46,6 +48,14 @@ public abstract class BasePlayer {
 
 	public String getPlayerName() {
 		return name;
+	}
+
+	public BattleArena getArena() {
+		return arena;
+	}
+
+	public void setArena(BattleArena arena) {
+		this.arena = arena;
 	}
 
 	public IUserInterface getUserInterface() {
@@ -70,7 +80,7 @@ public abstract class BasePlayer {
 
 	public void guessCodeTo(BasePlayer player, String guess) {
 		guesses++;
-		String hint = getHint(guess);
+		String hint = player.getHint(guess);
 		if (hint.equals("WON")) {
 			setGuessed(true);
 			getUserInterface().showText("You won!");
@@ -101,12 +111,13 @@ public abstract class BasePlayer {
 	}
 
 	public boolean next(BasePlayer opponent) {
-		nextGuess(opponent);
+		String text = getGuessCode();
+		guessCodeTo(opponent, text);
 		return true;
 	}
 
 	// Твой ход!
-	protected abstract void nextGuess(BasePlayer player);
+	protected abstract String getGuessCode();
 
 	@Override
 	public int hashCode() {

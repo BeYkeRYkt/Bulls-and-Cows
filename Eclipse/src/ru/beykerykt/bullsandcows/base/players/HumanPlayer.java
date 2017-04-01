@@ -34,15 +34,12 @@ public class HumanPlayer extends BasePlayer {
 	}
 
 	@Override
-	public void nextGuess(BasePlayer bot) {
+	public String getGuessCode() {
 		getUserInterface().showText("Guess a 4-digit number with no duplicate digits: ");
-		// getUserInterface().showText(bot.getSecretCode());
 		Scanner input = new Scanner(System.in);
 		int guess = input.nextInt();
 		String line = String.valueOf(guess);
-		guessCodeTo(bot, line);
-		
-		getUserInterface().showText(bot.getHint(line));
+		return line;
 	}
 
 }

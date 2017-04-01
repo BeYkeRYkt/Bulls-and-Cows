@@ -33,8 +33,9 @@ public class BotPlayer extends BasePlayer {
 	}
 
 	@Override
-	public void nextGuess(BasePlayer player) {
-		player.getUserInterface().showText("PASS");
+	protected String getGuessCode() {
+		getArena().broadcastMessage("I'm stupid banana. I'm pass.");
+		return "PASS";
 	}
 
 }

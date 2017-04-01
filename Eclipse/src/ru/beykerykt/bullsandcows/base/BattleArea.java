@@ -38,7 +38,7 @@ public class BattleArea implements Runnable {
 	private boolean isPaused = false;
 
 	// Players
-	List<BasePlayer> players = new ArrayList<BasePlayer>();
+	private List<BasePlayer> players = new ArrayList<BasePlayer>();
 
 	// Executor
 	private int time = -1;
@@ -90,7 +90,7 @@ public class BattleArea implements Runnable {
 
 	//////////////////////////////////////////////////////////////////////
 	//
-	// Player1 and player2
+	// Players
 	//
 	/////////////////////////////////////////////////////////////////////
 	public List<BasePlayer> getPlayers() {

@@ -11,21 +11,23 @@ public class TestZone {
 		BasePlayer bot = new BotPlayer("Bob", GameUtils.generateRandomCode());
 
 		BattleArea arena = new BattleArea();
-		arena.start(player, bot);
+		arena.addPlayer(player);
+		arena.addPlayer(bot);
+		arena.start();
 
-		//Scanner input = new Scanner(System.in);
-		//player.getUserInterface().showText("Guess a 4-digit number with no duplicate digits: ");
-		//player.getUserInterface().showText(bot.getSecretCode());
-		
-		//BobFinder finder = new BobFinder();
-		//finder.reset();
-		
-		//while (arena.isRunning()) {
-		//	int guess = input.nextInt();
-		//	String line = String.valueOf(guess);
-		//	player.getUserInterface().showText(bot.getHint(line));
-		//}
-		//input.close();
+		// Scanner input = new Scanner(System.in);
+		// player.getUserInterface().showText("Guess a 4-digit number with no duplicate digits: ");
+		// player.getUserInterface().showText(bot.getSecretCode());
+
+		// BobFinder finder = new BobFinder();
+		// finder.reset();
+
+		// while (arena.isRunning()) {
+		// int guess = input.nextInt();
+		// String line = String.valueOf(guess);
+		// player.getUserInterface().showText(bot.getHint(line));
+		// }
+		// input.close();
 	}
 
 }

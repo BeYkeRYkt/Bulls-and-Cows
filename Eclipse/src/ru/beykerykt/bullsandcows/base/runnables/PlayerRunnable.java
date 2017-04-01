@@ -15,12 +15,12 @@ public class PlayerRunnable extends BattleArenaRunnable {
 	public void run() {
 		if (!getArena().isPaused()) {
 			ListIterator<BasePlayer> li = getArena().getPlayers().listIterator();
-			while(li.hasNext()){
+			while (li.hasNext()) {
 				BasePlayer player = li.next();
-				if(li.hasNext()){
+				if (li.hasNext()) {
 					player.next(li.next());
 					li.previous();
-				}else{
+				} else {
 					player.next(getArena().getPlayers().get(0));
 				}
 			}

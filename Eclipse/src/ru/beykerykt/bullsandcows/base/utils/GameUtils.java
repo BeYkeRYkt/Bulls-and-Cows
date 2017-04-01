@@ -31,7 +31,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class GameUtils {
 
-	private static ScheduledExecutorService es = Executors.newSingleThreadScheduledExecutor();
+	private static ScheduledExecutorService es = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 	public static int CODE_POWER[] = { 0, 1, 2, 3, 4, 5, 6 };
 	public static int CODE_POWER_LENGTH = CODE_POWER.length - 1;
 	public static int CODE_LENGTH = 4;

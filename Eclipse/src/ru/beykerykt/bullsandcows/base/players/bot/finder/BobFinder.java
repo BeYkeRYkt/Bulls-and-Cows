@@ -41,7 +41,7 @@ public class BobFinder implements CodeFinder {
 
 	@Override
 	public void reset() {
-		
+
 	}
 
 }

@@ -94,12 +94,12 @@ public abstract class BasePlayer {
 		}
 		return bulls + ":" + cows;
 	}
-	
-	public boolean next(BasePlayer opponent){
+
+	public boolean next(BasePlayer opponent) {
 		nextGuess(opponent);
 		return true;
 	}
-	
-	//Твой ход!
+
+	// Твой ход!
 	protected abstract void nextGuess(BasePlayer player);
 }

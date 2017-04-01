@@ -24,8 +24,12 @@
 package ru.beykerykt.bullsandcows.base;
 
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class GameUtils {
+
+	private static ScheduledExecutorService es = Executors.newSingleThreadScheduledExecutor();
 
 	public static String generateRandomCode() {
 		Random rand = new Random();
@@ -46,6 +50,11 @@ public class GameUtils {
 		}
 		return false;
 	}
-	
-	
+
+	public static ScheduledExecutorService getExecutorService() {
+		if (es == null || es.isShutdown()) {
+			es = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
+		}
+		return es;
+	}
 }

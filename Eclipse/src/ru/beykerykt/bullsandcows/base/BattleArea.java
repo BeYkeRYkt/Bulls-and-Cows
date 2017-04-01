@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import ru.beykerykt.bullsandcows.base.players.BasePlayer;
@@ -41,8 +42,8 @@ public class BattleArea implements Runnable {
 	private List<BasePlayer> players = new ArrayList<BasePlayer>();
 
 	// Executor
+	private ScheduledFuture<?> timer = null;
 	private int time = -1;
-	private ScheduledExecutorService es = Executors.newSingleThreadScheduledExecutor();
 
 	//////////////////////////////////////////////////////////////////////
 	//
@@ -51,11 +52,15 @@ public class BattleArea implements Runnable {
 	/////////////////////////////////////////////////////////////////////
 	public void start() {
 		if (!isRunning()) {
+			if (getPlayers().isEmpty()) {
+				return;
+			}
+
 			setRunning(true); // run!
 			setPaused(false); // set false pause
 
 			// Start timer
-			es.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
+			timer = GameUtils.getExecutorService().scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
 		}
 	}
 
@@ -63,7 +68,7 @@ public class BattleArea implements Runnable {
 		if (isRunning()) {
 			setRunning(false);
 			setPaused(false);
-			es.shutdownNow();
+			// GameUtils.getExecutorService().shutdownNow();
 		}
 	}
 
@@ -145,8 +150,9 @@ public class BattleArea implements Runnable {
 	/////////////////////////////////////////////////////////////////////
 	@Override
 	public void run() {
-		if (!isPaused) {
+		if (!isPaused()) {
 			time++;
+			broadcastMessage(getTime());
 		}
 	}
 }

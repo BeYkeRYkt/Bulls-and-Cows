@@ -26,6 +26,6 @@ package ru.beykerykt.bullsandcows.base.players.bot.finder;
 public interface CodeFinder {
 
 	public void reset();
-	
+
 	public int getGuessCode();
 }

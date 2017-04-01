@@ -26,12 +26,11 @@ package ru.beykerykt.bullsandcows.base;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import ru.beykerykt.bullsandcows.base.players.BasePlayer;
+import ru.beykerykt.bullsandcows.base.utils.GameUtils;
 
 public class BattleArena implements Runnable {
 

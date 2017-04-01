@@ -21,7 +21,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-package ru.beykerykt.bullsandcows.base;
+package ru.beykerykt.bullsandcows.base.utils;
 
 import java.util.Random;
 import java.util.concurrent.Executors;

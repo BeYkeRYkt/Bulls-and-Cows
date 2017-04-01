@@ -153,7 +153,6 @@ public class BattleArea implements Runnable {
 	public void run() {
 		if (!isPaused()) {
 			time++;
-			broadcastMessage(getTime());
 		}
 	}
 }

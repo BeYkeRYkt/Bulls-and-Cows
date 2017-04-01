@@ -69,6 +69,7 @@ public class BattleArea implements Runnable {
 			setRunning(false);
 			setPaused(false);
 			// GameUtils.getExecutorService().shutdownNow();
+			timer.cancel(false);
 		}
 	}
 

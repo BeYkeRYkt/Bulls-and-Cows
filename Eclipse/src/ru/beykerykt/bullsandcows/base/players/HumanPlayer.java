@@ -40,6 +40,8 @@ public class HumanPlayer extends BasePlayer {
 		Scanner input = new Scanner(System.in);
 		int guess = input.nextInt();
 		String line = String.valueOf(guess);
+		guessCodeTo(bot, line);
+		
 		getUserInterface().showText(bot.getHint(line));
 	}
 

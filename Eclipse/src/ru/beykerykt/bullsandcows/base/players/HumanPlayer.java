@@ -29,17 +29,55 @@ import ru.beykerykt.bullsandcows.base.gui.IUserInterface;
 
 public class HumanPlayer extends BasePlayer {
 
+	private Scanner input;
+
 	public HumanPlayer(String name, String code, IUserInterface gui) {
 		super(name, code, gui);
 	}
 
 	@Override
+	public void onStartGame() {
+		input = new Scanner(System.in);
+	}
+
+	@Override
+	public void onEndGame() {
+		input.close();
+	}
+
+	@Override
 	public String getGuessCode() {
 		getUserInterface().showText("Guess a 4-digit number with no duplicate digits: ");
-		Scanner input = new Scanner(System.in);
 		int guess = input.nextInt();
 		String line = String.valueOf(guess);
 		return line;
 	}
 
+	@Override
+	public BasePlayer getChooseOpponent() {
+		if (getArena().getPlayers().size() == 2) {
+			for (BasePlayer player : getArena().getPlayers()) {
+				if (!player.getPlayerName().equals(getPlayerName())) {
+					return player;
+				}
+			}
+		}
+
+		getUserInterface().showText("Choose your opponent");
+		for (int i = 0; i < getArena().getPlayers().size(); i++) {
+			getUserInterface().showText((i + 1) + ". " + getArena().getPlayers().get(i).getPlayerName());
+		}
+		int index = input.nextInt() - 1;
+		if (index < 0 || index > getArena().getPlayers().size()) {
+			getUserInterface().showText("Wrong index!");
+			return getChooseOpponent();
+		}
+		BasePlayer op = getArena().getPlayers().get(index);
+		if (op.getPlayerName().equals(getPlayerName())) {
+			getUserInterface().showText("You stupid idiot!");
+			getUserInterface().showText("Choose other player!");
+			return getChooseOpponent();
+		}
+		return op;
+	}
 }

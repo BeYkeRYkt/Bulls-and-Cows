@@ -110,13 +110,25 @@ public abstract class BasePlayer {
 		return bulls + ":" + cows;
 	}
 
-	public boolean next(BasePlayer opponent) {
-		String text = getGuessCode();
-		guessCodeTo(opponent, text);
-		return true;
+	//////////////////////////////////////////////////////////////////////
+	//
+	// GameEvents
+	//
+	/////////////////////////////////////////////////////////////////////
+	public void onStartGame() {
 	}
 
-	// Твой ход!
+	public void onEndGame() {
+	}
+
+	public void onTurn() {
+		BasePlayer opponent = getChooseOpponent();
+		String gcode = getGuessCode();
+		guessCodeTo(opponent, gcode);
+	}
+
+	public abstract BasePlayer getChooseOpponent();
+
 	protected abstract String getGuessCode();
 
 	@Override

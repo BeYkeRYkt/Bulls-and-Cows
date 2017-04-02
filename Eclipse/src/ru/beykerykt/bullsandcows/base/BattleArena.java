@@ -117,6 +117,7 @@ public class BattleArena implements Runnable {
 		if (!getPlayers().contains(player) && player.getArena() == null) {
 			getPlayers().add(player);
 			player.setArena(this);
+			player.onStartGame();
 			return true;
 		}
 		return false;
@@ -124,6 +125,7 @@ public class BattleArena implements Runnable {
 
 	public boolean removePlayer(BasePlayer player) {
 		if (getPlayers().contains(player) && player.getArena() == this) {
+			player.onEndGame();
 			getPlayers().remove(player);
 			player.setArena(null);
 			return true;

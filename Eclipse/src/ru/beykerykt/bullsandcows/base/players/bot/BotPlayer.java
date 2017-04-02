@@ -23,6 +23,8 @@
 */
 package ru.beykerykt.bullsandcows.base.players.bot;
 
+import java.util.Random;
+
 import ru.beykerykt.bullsandcows.base.gui.NullInterface;
 import ru.beykerykt.bullsandcows.base.players.BasePlayer;
 
@@ -36,6 +38,19 @@ public class BotPlayer extends BasePlayer {
 	protected String getGuessCode() {
 		getArena().broadcastMessage("I'm stupid banana. I'm pass.");
 		return "PASS";
+	}
+
+	@Override
+	public BasePlayer getChooseOpponent() {
+		Random r = new Random();
+		int index = r.nextInt(getArena().getPlayers().size());
+		BasePlayer op = getArena().getPlayers().get(index);
+		if (op.getPlayerName().equals(getPlayerName())) {
+			getUserInterface().showText("You stupid idiot!");
+			getUserInterface().showText("Choose other player!");
+			return getChooseOpponent();
+		}
+		return op;
 	}
 
 }

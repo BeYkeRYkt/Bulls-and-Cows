@@ -27,17 +27,28 @@ import java.util.Random;
 
 import ru.beykerykt.bullsandcows.base.gui.NullInterface;
 import ru.beykerykt.bullsandcows.base.players.BasePlayer;
+import ru.beykerykt.bullsandcows.base.players.bot.finder.BobFinder;
+import ru.beykerykt.bullsandcows.base.players.bot.finder.CodeFinder;
 
 public class BotPlayer extends BasePlayer {
 
+	private CodeFinder finder;
+
 	public BotPlayer(String name, String code) {
 		super(name, code, new NullInterface());
+		setCodeFinder(new BobFinder());
+	}
+
+	@Override
+	public void onStartGame() {
+		getCodeFinder().reset();
 	}
 
 	@Override
 	protected String getGuessCode() {
-		getArena().broadcastMessage("I'm stupid banana. I'm pass.");
-		return "PASS";
+		String code = getCodeFinder().getGuessCode();
+		getArena().broadcastMessage("I'm stupid banana. I think: " + code);
+		return code;
 	}
 
 	@Override
@@ -47,10 +58,22 @@ public class BotPlayer extends BasePlayer {
 		BasePlayer op = getArena().getPlayers().get(index);
 		if (op.getPlayerName().equals(getPlayerName())) {
 			getUserInterface().showText("You stupid idiot!");
-			getUserInterface().showText("Choose other player!");
+			getUserInterface().showText("Choose another player!");
 			return getChooseOpponent();
 		}
 		return op;
 	}
 
+	@Override
+	public void onReceivingResponse(String response) {
+		getCodeFinder().onReceivingResponse(response);
+	}
+
+	public CodeFinder getCodeFinder() {
+		return finder;
+	}
+
+	public void setCodeFinder(CodeFinder finder) {
+		this.finder = finder;
+	}
 }

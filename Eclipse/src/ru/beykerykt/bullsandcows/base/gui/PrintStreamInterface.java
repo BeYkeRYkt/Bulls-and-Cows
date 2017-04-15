@@ -24,10 +24,12 @@
 package ru.beykerykt.bullsandcows.base.gui;
 
 import java.io.PrintStream;
+import java.util.Scanner;
 
 public class PrintStreamInterface implements IUserInterface {
 
 	protected PrintStream stream;
+	protected Scanner input;
 
 	public PrintStreamInterface(PrintStream stream) {
 		this.stream = stream;
@@ -36,6 +38,21 @@ public class PrintStreamInterface implements IUserInterface {
 	@Override
 	public void showText(String text) {
 		stream.println(text);
+	}
+
+	@Override
+	public String getInput() {
+		return input.next();
+	}
+
+	@Override
+	public void onPlayerJoin() {
+		input = new Scanner(System.in);
+	}
+
+	@Override
+	public void onPlayerLeave() {
+		input.close();
 	}
 
 }

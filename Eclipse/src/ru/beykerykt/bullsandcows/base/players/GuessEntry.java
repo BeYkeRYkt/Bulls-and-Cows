@@ -21,35 +21,34 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 **/
-package ru.beykerykt.bullsandcows.base.players.bot.finder;
+package ru.beykerykt.bullsandcows.base.players;
 
-import java.util.List;
-import java.util.Random;
+public class GuessEntry {
+	private String name;
+	private int guesses;
+	private boolean guessed;
 
-import ru.beykerykt.bullsandcows.base.utils.GameUtils;
-
-public class BobFinder implements CodeFinder {
-
-	private int CODE_POWER[] = { 0, 1, 2, 3, 4, 5, 6 };
-	private int CODE_POWER_LENGTH = CODE_POWER.length - 1;
-
-	private List<String> allCodes;
-	private Random rand = new Random();
-
-	@Override
-	public String getGuessCode() {
-		return allCodes.get(rand.nextInt(allCodes.size()));
+	public GuessEntry(String name) {
+		this.name = name;
 	}
 
-	@Override
-	public void reset() {
-		this.allCodes = GameUtils.getAllCodes(CODE_POWER_LENGTH);
+	public String getName() {
+		return name;
 	}
 
-	@Override
-	public void onReceivingResponse(String response) {
-		if (allCodes.contains(response)) {
-			allCodes.remove(response);
-		}
+	public void tickGuess() {
+		guesses++;
+	}
+
+	public int getGuesses() {
+		return guesses;
+	}
+
+	public boolean isGuessed() {
+		return guessed;
+	}
+
+	public void setGuessed(boolean guessed) {
+		this.guessed = guessed;
 	}
 }

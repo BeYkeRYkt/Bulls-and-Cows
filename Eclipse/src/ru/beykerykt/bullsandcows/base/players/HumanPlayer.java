@@ -23,33 +23,18 @@
 **/
 package ru.beykerykt.bullsandcows.base.players;
 
-import java.util.Scanner;
-
 import ru.beykerykt.bullsandcows.base.gui.IUserInterface;
 
 public class HumanPlayer extends BasePlayer {
-
-	private Scanner input;
 
 	public HumanPlayer(String name, String code, IUserInterface gui) {
 		super(name, code, gui);
 	}
 
 	@Override
-	public void onStartGame() {
-		input = new Scanner(System.in);
-	}
-
-	@Override
-	public void onEndGame() {
-		input.close();
-	}
-
-	@Override
 	public String getGuessCode() {
 		getUserInterface().showText("Guess a 4-digit number with no duplicate digits: ");
-		int guess = input.nextInt();
-		String line = String.valueOf(guess);
+		String line = getUserInterface().getInput();
 		return line;
 	}
 
@@ -67,7 +52,7 @@ public class HumanPlayer extends BasePlayer {
 		for (int i = 0; i < getArena().getPlayers().size(); i++) {
 			getUserInterface().showText((i + 1) + ". " + getArena().getPlayers().get(i).getPlayerName());
 		}
-		int index = input.nextInt() - 1;
+		int index = Integer.valueOf(getUserInterface().getInput()) - 1;
 		if (index < 0 || index > getArena().getPlayers().size()) {
 			getUserInterface().showText("Wrong index!");
 			return getChooseOpponent();

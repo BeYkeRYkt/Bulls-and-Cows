@@ -25,6 +25,7 @@ package ru.beykerykt.bullsandcows.base.runnables;
 
 import ru.beykerykt.bullsandcows.base.BattleArena;
 import ru.beykerykt.bullsandcows.base.players.BasePlayer;
+import ru.beykerykt.bullsandcows.base.players.GuessEntry;
 
 public class PlayerRunnable extends BattleArenaRunnable {
 
@@ -37,6 +38,12 @@ public class PlayerRunnable extends BattleArenaRunnable {
 		if (!getArena().isPaused()) {
 			for (BasePlayer player : getArena().getPlayers()) {
 				player.onTurn();
+
+				for (GuessEntry p : player.getGuessedPlayers()) {
+					if (p.isGuessed()) {
+						getArena().stop();
+					}
+				}
 			}
 		}
 	}

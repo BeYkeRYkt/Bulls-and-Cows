@@ -38,22 +38,8 @@ public class GameUtils {
 
 	public static String generateRandomCode() {
 		Random rand = new Random();
-		int target = 0;
-		while (hasDupes(target = (rand.nextInt(9000) + 1000)))
-			;
-		String targetStr = String.valueOf(target);
-		return targetStr;
-	}
-
-	public static boolean hasDupes(int num) {
-		boolean[] digs = new boolean[10];
-		while (num > 0) {
-			if (digs[num % 10])
-				return true;
-			digs[num % 10] = true;
-			num /= 10;
-		}
-		return false;
+		List<String> allCodes = getAllCodes(CODE_POWER_LENGTH);
+		return allCodes.get(rand.nextInt(allCodes.size()));
 	}
 
 	public static List<String> getAllCodes(int length) {
@@ -62,7 +48,7 @@ public class GameUtils {
 			for (int j = 0; j < length; j++) {
 				for (int k = 0; k < length; k++) {
 					for (int l = 0; l < length; l++) {
-						String code = String.valueOf(i + j + k + l);
+						String code = String.valueOf("" + i + j + k + l);
 						list.add(code);
 					}
 				}

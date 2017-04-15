@@ -27,4 +27,10 @@ public interface IUserInterface {
 
 	public void showText(String text);
 
+	public String getInput();
+
+	public void onPlayerJoin();
+
+	public void onPlayerLeave();
+
 }

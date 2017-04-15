@@ -39,6 +39,8 @@ public class TestZone {
 			arena.addPlayer(player);
 			arena.addPlayer(bot);
 			arena.start();
+
+			player.getUserInterface().showText(bot.getSecretCode());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

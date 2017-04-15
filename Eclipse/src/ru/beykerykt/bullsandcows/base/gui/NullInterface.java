@@ -28,6 +28,22 @@ public class NullInterface implements IUserInterface {
 	@Override
 	public void showText(String text) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public String getInput() {
+		return null;
+	}
+
+	@Override
+	public void onPlayerJoin() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onPlayerLeave() {
+		// TODO Auto-generated method stub
 
 	}
 

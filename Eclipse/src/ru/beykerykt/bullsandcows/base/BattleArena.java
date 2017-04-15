@@ -27,8 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.beykerykt.bullsandcows.base.players.BasePlayer;
+import ru.beykerykt.bullsandcows.base.players.GuessEntry;
 import ru.beykerykt.bullsandcows.base.runnables.PlayerRunnable;
 import ru.beykerykt.bullsandcows.base.runnables.TimerRunnable;
+import ru.beykerykt.bullsandcows.base.utils.GameUtils;
 
 public class BattleArena implements Runnable {
 
@@ -76,6 +78,7 @@ public class BattleArena implements Runnable {
 			setPaused(false);
 			timerR.stop();
 			playerR.stop();
+			GameUtils.getExecutorService().shutdownNow();
 		}
 	}
 
@@ -117,6 +120,11 @@ public class BattleArena implements Runnable {
 		if (!getPlayers().contains(player) && player.getArena() == null) {
 			getPlayers().add(player);
 			player.setArena(this);
+			for (BasePlayer p : getPlayers()) {
+				p.getGuessedPlayers().add(new GuessEntry(player.getPlayerName()));
+				p.onPlayerJoin(player);
+				p.getUserInterface().onPlayerJoin();
+			}
 			player.onStartGame();
 			return true;
 		}
@@ -128,6 +136,11 @@ public class BattleArena implements Runnable {
 			player.onEndGame();
 			getPlayers().remove(player);
 			player.setArena(null);
+			for (BasePlayer p : getPlayers()) {
+				p.getUserInterface().onPlayerLeave();
+				p.onPlayerLeave(player);
+				p.getGuessedPlayers().remove(p.getGuessedPlayer(player.getPlayerName()));
+			}
 			return true;
 		}
 		return false;

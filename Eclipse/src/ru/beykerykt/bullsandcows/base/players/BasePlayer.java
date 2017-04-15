@@ -23,6 +23,9 @@
 **/
 package ru.beykerykt.bullsandcows.base.players;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ru.beykerykt.bullsandcows.base.BattleArena;
 import ru.beykerykt.bullsandcows.base.gui.IUserInterface;
 import ru.beykerykt.bullsandcows.base.utils.GameUtils;
@@ -32,16 +35,21 @@ public abstract class BasePlayer {
 	private String code;
 	private String name;
 	private IUserInterface gui;
-	private boolean guessed = false;
-	private int guesses = 0;
 	private BattleArena arena;
+	private List<GuessEntry> guessedPlayers;
 
 	public BasePlayer(String name, String code, IUserInterface gui) {
 		this.name = name;
 		this.code = code;
 		this.gui = gui;
+		this.guessedPlayers = new ArrayList<GuessEntry>();
 	}
 
+	//////////////////////////////////////////////////////////////////////
+	//
+	// General
+	//
+	/////////////////////////////////////////////////////////////////////
 	public String getSecretCode() {
 		return code;
 	}
@@ -62,44 +70,51 @@ public abstract class BasePlayer {
 		return gui;
 	}
 
-	public boolean isGuessed() {
-		return guessed;
+	//////////////////////////////////////////////////////////////////////
+	//
+	// Multiplayer
+	//
+	/////////////////////////////////////////////////////////////////////
+	public List<GuessEntry> getGuessedPlayers() {
+		return guessedPlayers;
 	}
 
-	public void setGuessed(boolean guessed) {
-		this.guessed = guessed;
-	}
-
-	public int getGuesses() {
-		return guesses;
-	}
-
-	public void setGuesses(int guesses) {
-		this.guesses = guesses;
+	public GuessEntry getGuessedPlayer(String name) {
+		for (GuessEntry entry : getGuessedPlayers()) {
+			if (entry.getName().equals(name)) {
+				return entry;
+			}
+		}
+		return null;
 	}
 
 	public void guessCodeTo(BasePlayer player, String guess) {
-		guesses++;
+		GuessEntry entry = getGuessedPlayer(player.getPlayerName());
+		if (entry == null) {
+			return;
+		}
+		entry.tickGuess();
 		String hint = player.getHint(guess);
+		onReceivingResponse(hint);
 		if (hint.equals("WON")) {
-			setGuessed(true);
+			entry.setGuessed(true);
 			getUserInterface().showText("You won!");
 		}
 		getUserInterface().showText(hint);
 	}
 
-	public String getHint(String guess) {
+	public String getHint(String guessFromAnotherPlayer) {
 		int bulls = 0;
 		int cows = 0;
 
-		if (guess.length() < GameUtils.CODE_LENGTH) {
+		if (guessFromAnotherPlayer.length() < GameUtils.CODE_LENGTH) {
 			return bulls + ":" + cows;
 		}
 
 		for (int i = 0; i < getSecretCode().length(); i++) {
-			if (guess.charAt(i) == getSecretCode().charAt(i)) {
+			if (guessFromAnotherPlayer.charAt(i) == getSecretCode().charAt(i)) {
 				bulls++;
-			} else if (getSecretCode().contains(guess.charAt(i) + "")) {
+			} else if (getSecretCode().contains(guessFromAnotherPlayer.charAt(i) + "")) {
 				cows++;
 			}
 		}
@@ -121,10 +136,19 @@ public abstract class BasePlayer {
 	public void onEndGame() {
 	}
 
+	public void onPlayerJoin(BasePlayer player) {
+	}
+
+	public void onPlayerLeave(BasePlayer player) {
+	}
+
 	public void onTurn() {
 		BasePlayer opponent = getChooseOpponent();
 		String gcode = getGuessCode();
 		guessCodeTo(opponent, gcode);
+	}
+
+	public void onReceivingResponse(String response) {
 	}
 
 	public abstract BasePlayer getChooseOpponent();

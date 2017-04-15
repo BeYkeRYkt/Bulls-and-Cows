@@ -27,5 +27,7 @@ public interface CodeFinder {
 
 	public void reset();
 
-	public int getGuessCode();
+	public String getGuessCode();
+
+	void onReceivingResponse(String response);
 }

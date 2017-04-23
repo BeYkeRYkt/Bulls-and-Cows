@@ -27,8 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.beykerykt.bullsandcows.base.players.BasePlayer;
-import ru.beykerykt.bullsandcows.base.players.GuessEntry;
-import ru.beykerykt.bullsandcows.base.runnables.PlayerRunnable;
+import ru.beykerykt.bullsandcows.base.runnables.IRunnable;
 import ru.beykerykt.bullsandcows.base.runnables.TimerRunnable;
 import ru.beykerykt.bullsandcows.base.utils.GameUtils;
 
@@ -39,14 +38,16 @@ public class BattleArena implements Runnable {
 	private boolean isPaused = false;
 
 	// Players
-	private List<BasePlayer> players = new ArrayList<BasePlayer>();
+	private List<BasePlayer> players;
 
 	// Runnable's
+	private List<IRunnable> runnables;
 	private TimerRunnable timerR;
-	private PlayerRunnable playerR;
 
 	public BattleArena(String name) {
 		this.name = name;
+		this.players = new ArrayList<BasePlayer>();
+		this.runnables = new ArrayList<IRunnable>();
 	}
 
 	//////////////////////////////////////////////////////////////////////
@@ -65,10 +66,17 @@ public class BattleArena implements Runnable {
 
 			// init runables
 			timerR = new TimerRunnable(this);
-			playerR = new PlayerRunnable(this);
-
 			timerR.start();
-			playerR.start();
+
+			for (BasePlayer player : getPlayers()) {
+				player.onStartGame();
+			}
+
+			for (IRunnable r : getRunnables()) {
+				if (!r.isRunning()) {
+					r.start();
+				}
+			}
 		}
 	}
 
@@ -76,9 +84,19 @@ public class BattleArena implements Runnable {
 		if (isRunning()) {
 			setRunning(false);
 			setPaused(false);
+
+			for (BasePlayer player : getPlayers()) {
+				player.onEndGame();
+			}
+
+			for (IRunnable r : getRunnables()) {
+				if (r.isRunning()) {
+					r.stop();
+				}
+			}
+
 			timerR.stop();
-			playerR.stop();
-			GameUtils.getExecutorService().shutdownNow();
+			GameUtils.getExecutorService().shutdownNow(); // TEST
 		}
 	}
 
@@ -118,29 +136,34 @@ public class BattleArena implements Runnable {
 
 	public boolean addPlayer(BasePlayer player) {
 		if (!getPlayers().contains(player) && player.getArena() == null) {
-			getPlayers().add(player);
 			player.setArena(this);
+			getPlayers().add(player);
+			player.getUserInterface().onPlayerJoin();
 			for (BasePlayer p : getPlayers()) {
-				p.getGuessedPlayers().add(new GuessEntry(player.getPlayerName()));
 				p.onPlayerJoin(player);
-				p.getUserInterface().onPlayerJoin();
+				player.onPlayerJoin(p);
 			}
-			player.onStartGame();
+
+			if (isRunning()) {
+				player.onStartGame();
+			}
 			return true;
 		}
 		return false;
 	}
 
 	public boolean removePlayer(BasePlayer player) {
-		if (getPlayers().contains(player) && player.getArena() == this) {
-			player.onEndGame();
+		if (getPlayers().contains(player) && player.getArena() != this) {
+			if (isRunning()) {
+				player.onEndGame();
+			}
+			for (BasePlayer p : getPlayers()) {
+				player.onPlayerLeave(p);
+				p.onPlayerLeave(player);
+			}
+			player.getUserInterface().onPlayerLeave();
 			getPlayers().remove(player);
 			player.setArena(null);
-			for (BasePlayer p : getPlayers()) {
-				p.getUserInterface().onPlayerLeave();
-				p.onPlayerLeave(player);
-				p.getGuessedPlayers().remove(p.getGuessedPlayer(player.getPlayerName()));
-			}
 			return true;
 		}
 		return false;
@@ -175,6 +198,10 @@ public class BattleArena implements Runnable {
 	// Runnable
 	//
 	/////////////////////////////////////////////////////////////////////
+	public List<IRunnable> getRunnables() {
+		return runnables;
+	}
+
 	@Override
 	public void run() {
 		// TODO: ???

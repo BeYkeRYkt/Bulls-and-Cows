@@ -29,6 +29,8 @@ public interface IRunnable extends Runnable {
 
 	public void stop();
 
+	public boolean isRunning();
+
 	public String getName();
 
 }

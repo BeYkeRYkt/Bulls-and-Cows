@@ -27,6 +27,7 @@ import ru.beykerykt.bullsandcows.base.gui.PrintStreamInterface;
 import ru.beykerykt.bullsandcows.base.players.BasePlayer;
 import ru.beykerykt.bullsandcows.base.players.HumanPlayer;
 import ru.beykerykt.bullsandcows.base.players.bot.BotPlayer;
+import ru.beykerykt.bullsandcows.base.runnables.PlayerRunnable;
 import ru.beykerykt.bullsandcows.base.utils.GameUtils;
 
 public class TestZone {
@@ -36,6 +37,7 @@ public class TestZone {
 			BasePlayer bot = new BotPlayer("Bob", GameUtils.generateRandomCode());
 
 			BattleArena arena = new BattleArena("Test");
+			arena.getRunnables().add(new PlayerRunnable(arena));
 			arena.addPlayer(player);
 			arena.addPlayer(bot);
 			arena.start();

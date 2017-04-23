@@ -36,13 +36,13 @@ public abstract class BasePlayer {
 	private String name;
 	private IUserInterface gui;
 	private BattleArena arena;
-	private List<GuessEntry> guessedPlayers;
+	private List<OpponentInfo> guessedPlayers;
 
 	public BasePlayer(String name, String code, IUserInterface gui) {
 		this.name = name;
 		this.code = code;
 		this.gui = gui;
-		this.guessedPlayers = new ArrayList<GuessEntry>();
+		this.guessedPlayers = new ArrayList<OpponentInfo>();
 	}
 
 	//////////////////////////////////////////////////////////////////////
@@ -75,12 +75,12 @@ public abstract class BasePlayer {
 	// Multiplayer
 	//
 	/////////////////////////////////////////////////////////////////////
-	public List<GuessEntry> getGuessedPlayers() {
+	public List<OpponentInfo> getOpponentInfos() {
 		return guessedPlayers;
 	}
 
-	public GuessEntry getGuessedPlayer(String name) {
-		for (GuessEntry entry : getGuessedPlayers()) {
+	public OpponentInfo getOpponentInfo(String name) {
+		for (OpponentInfo entry : getOpponentInfos()) {
 			if (entry.getName().equals(name)) {
 				return entry;
 			}
@@ -88,19 +88,28 @@ public abstract class BasePlayer {
 		return null;
 	}
 
+	//////////////////////////////////////////////////////////////////////
+	//
+	// Multiplayer
+	//
+	/////////////////////////////////////////////////////////////////////
 	public void guessCodeTo(BasePlayer player, String guess) {
-		GuessEntry entry = getGuessedPlayer(player.getPlayerName());
+		OpponentInfo entry = getOpponentInfo(player.getPlayerName());
 		if (entry == null) {
 			return;
 		}
 		entry.tickGuess();
 		String hint = player.getHint(guess);
-		onReceivingResponse(hint);
-		if (hint.equals("WON")) {
+		entry.setLastCode(guess);
+		entry.setLastResponse(hint);
+		onReceivingResponse(entry.getLastResponse());
+
+		if (entry.getLastResponse().equals("WON")) {
 			entry.setGuessed(true);
 			getUserInterface().showText("You won!");
 		}
-		getUserInterface().showText(hint);
+		
+		getUserInterface().showText(entry.getLastResponse());
 	}
 
 	public String getHint(String guessFromAnotherPlayer) {
@@ -137,12 +146,18 @@ public abstract class BasePlayer {
 	}
 
 	public void onPlayerJoin(BasePlayer player) {
+		if (!player.getPlayerName().equals(getPlayerName()) && player.getArena().equals(getArena())) {
+			getOpponentInfos().add(new OpponentInfo(player.getPlayerName()));
+		}
 	}
 
 	public void onPlayerLeave(BasePlayer player) {
+		if (player.getPlayerName().equals(getPlayerName()) && player.getArena().equals(getArena())) {
+			getOpponentInfos().remove(getOpponentInfo(player.getPlayerName()));
+		}
 	}
 
-	public void onTurn() {
+	public void onTick() {
 		BasePlayer opponent = getChooseOpponent();
 		String gcode = getGuessCode();
 		guessCodeTo(opponent, gcode);

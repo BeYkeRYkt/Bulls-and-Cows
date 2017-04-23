@@ -35,14 +35,19 @@ public abstract class BattleArenaRunnable implements IRunnable {
 	private BattleArena arena;
 	private ScheduledFuture<?> sf = null;
 
-	public BattleArenaRunnable(String name, BattleArena arena) {
+	private long period;
+	private TimeUnit timeUnit;
+
+	public BattleArenaRunnable(String name, BattleArena arena, long period, TimeUnit timeUnit) {
 		this.name = name;
 		this.arena = arena;
+		this.period = period;
+		this.timeUnit = timeUnit;
 	}
 
 	@Override
 	public void start() {
-		sf = GameUtils.getExecutorService().scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
+		sf = GameUtils.getExecutorService().scheduleAtFixedRate(this, 0, period, timeUnit);
 	}
 
 	@Override
@@ -53,6 +58,14 @@ public abstract class BattleArenaRunnable implements IRunnable {
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public boolean isRunning() {
+		if (sf != null && (!sf.isCancelled() || !sf.isDone())) {
+			return true;
+		}
+		return false;
 	}
 
 	public BattleArena getArena() {

@@ -24,6 +24,7 @@
 package ru.beykerykt.bullsandcows.base.runnables;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
 
 import ru.beykerykt.bullsandcows.base.BattleArena;
 
@@ -32,7 +33,7 @@ public class TimerRunnable extends BattleArenaRunnable {
 	private int time = -1;
 
 	public TimerRunnable(BattleArena arena) {
-		super("timer", arena);
+		super("timer", arena, 1, TimeUnit.SECONDS);
 	}
 
 	@Override

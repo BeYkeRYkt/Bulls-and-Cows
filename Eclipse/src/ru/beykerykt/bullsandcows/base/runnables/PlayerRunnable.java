@@ -23,24 +23,31 @@
 **/
 package ru.beykerykt.bullsandcows.base.runnables;
 
+import java.util.concurrent.TimeUnit;
+
 import ru.beykerykt.bullsandcows.base.BattleArena;
 import ru.beykerykt.bullsandcows.base.players.BasePlayer;
-import ru.beykerykt.bullsandcows.base.players.GuessEntry;
+import ru.beykerykt.bullsandcows.base.players.OpponentInfo;
 
 public class PlayerRunnable extends BattleArenaRunnable {
 
 	public PlayerRunnable(BattleArena arena) {
-		super("players", arena);
+		super("players", arena, 1, TimeUnit.MILLISECONDS);
 	}
 
 	@Override
 	public void run() {
 		if (!getArena().isPaused()) {
 			for (BasePlayer player : getArena().getPlayers()) {
-				player.onTurn();
+				try {
+					player.onTick();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
-				for (GuessEntry p : player.getGuessedPlayers()) {
+				for (OpponentInfo p : player.getOpponentInfos()) {
 					if (p.isGuessed()) {
+						getArena().broadcastMessage(player.getPlayerName() + " WIN!");
 						getArena().stop();
 					}
 				}

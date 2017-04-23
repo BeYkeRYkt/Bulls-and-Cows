@@ -30,26 +30,27 @@ import ru.beykerykt.bullsandcows.base.utils.GameUtils;
 
 public class BobFinder implements CodeFinder {
 
-	private int CODE_POWER[] = { 0, 1, 2, 3, 4, 5, 6 };
-	private int CODE_POWER_LENGTH = CODE_POWER.length - 1;
-
 	private List<String> allCodes;
 	private Random rand = new Random();
+	private String lastCode;
 
 	@Override
 	public String getGuessCode() {
-		return allCodes.get(rand.nextInt(allCodes.size()));
+		lastCode = allCodes.get(rand.nextInt(allCodes.size()));
+		return lastCode;
 	}
 
 	@Override
 	public void reset() {
-		this.allCodes = GameUtils.getAllCodes(CODE_POWER_LENGTH);
+		this.allCodes = GameUtils.getAllCodes(GameUtils.CODE_POWER_LENGTH);
 	}
 
 	@Override
 	public void onReceivingResponse(String response) {
-		if (allCodes.contains(response)) {
-			allCodes.remove(response);
+		// return "0:0"
+		if (allCodes.contains(lastCode)) {
+			allCodes.remove(lastCode);
 		}
+		System.out.println("Size: " + allCodes.size());
 	}
 }

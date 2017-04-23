@@ -23,12 +23,14 @@
 **/
 package ru.beykerykt.bullsandcows.base.players;
 
-public class GuessEntry {
+public class OpponentInfo {
 	private String name;
 	private int guesses;
 	private boolean guessed;
+	private String lastCode;
+	private String lastResponse;
 
-	public GuessEntry(String name) {
+	public OpponentInfo(String name) {
 		this.name = name;
 	}
 
@@ -50,5 +52,52 @@ public class GuessEntry {
 
 	public void setGuessed(boolean guessed) {
 		this.guessed = guessed;
+	}
+
+	public String getLastCode() {
+		return lastCode;
+	}
+
+	public void setLastCode(String lastCode) {
+		this.lastCode = lastCode;
+	}
+
+	public String getLastResponse() {
+		return lastResponse;
+	}
+
+	public void setLastResponse(String lastResponse) {
+		this.lastResponse = lastResponse;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (guessed ? 1231 : 1237);
+		result = prime * result + guesses;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		OpponentInfo other = (OpponentInfo) obj;
+		if (guessed != other.guessed)
+			return false;
+		if (guesses != other.guesses)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
 }

@@ -39,6 +39,8 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -136,6 +138,7 @@ public class GUi {
 			e.printStackTrace();
 		}
 		frame.getContentPane().setFont(fontRegular);
+		frame.getContentPane().setBackground(Resources.Colors.WHITE);
 		frame.setResizable(false);
 		frame.setBounds(100, 100, 550, 400);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -148,9 +151,10 @@ public class GUi {
 		/////////////////////////////////////////////////////////////////////
 
 		// Player name
-		JLabel playerName = new JLabel(Resources.Localization.PLAYER_NAME);
+		JLabel playerName = new JLabel(Resources.Localization.PLAYER_NAME.toUpperCase());
+		playerName.setForeground(Resources.Colors.CYAN);
 		playerName.setFont(fontRegular);
-		playerName.setBounds(10, 11, 170, 20);
+		playerName.setBounds(10, 11, 190, 20);
 		frame.getContentPane().add(playerName);
 
 		pName = new JTextField();
@@ -158,15 +162,16 @@ public class GUi {
 		pName.setEditable(false);
 		pName.setToolTipText(Localization.UNAVAILABLE);
 		pName.setFont(fontItalic);
-		pName.setBounds(10, 42, 170, 20);
+		pName.setBounds(10, 42, 190, 20);
 		pName.setColumns(10);
 		pName.setText(Localization.PLAYER_DEFAULT_NAME);
 		frame.getContentPane().add(pName);
 
 		// Bot name
-		JLabel botName = new JLabel(Resources.Localization.BOT_NAME);
+		JLabel botName = new JLabel(Resources.Localization.BOT_NAME.toUpperCase());
+		botName.setForeground(Resources.Colors.CYAN);
 		botName.setFont(fontRegular);
-		botName.setBounds(10, 73, 170, 20);
+		botName.setBounds(10, 73, 190, 20);
 		frame.getContentPane().add(botName);
 
 		bName = new JTextField();
@@ -174,7 +179,7 @@ public class GUi {
 		bName.setEditable(false);
 		bName.setToolTipText(Localization.UNAVAILABLE);
 		bName.setFont(fontItalic);
-		bName.setBounds(10, 104, 170, 20);
+		bName.setBounds(10, 104, 190, 20);
 		bName.setColumns(10);
 		bName.setText(Localization.BOT_DEFAULT_NAME);
 		frame.getContentPane().add(bName);
@@ -186,34 +191,39 @@ public class GUi {
 		/////////////////////////////////////////////////////////////////////
 
 		// Usercode
-		JLabel yourCode = new JLabel(Localization.YOUR_CODE);
+		JLabel yourCode = new JLabel(Localization.YOUR_CODE.toUpperCase());
+		yourCode.setForeground(Resources.Colors.CYAN);
 		yourCode.setToolTipText(Localization.YOUR_CODE_DESCRPTION);
 		yourCode.setFont(fontRegular);
-		yourCode.setBounds(10, 135, 170, 20);
+		yourCode.setBounds(10, 135, 190, 20);
 		frame.getContentPane().add(yourCode);
 
 		usercode = new JTextField();
 		usercode.setToolTipText(Localization.YOUR_CODE_DESCRPTION);
-		usercode.setBounds(10, 166, 170, 20);
+		usercode.setBounds(10, 166, 190, 20);
 		usercode.setFont(fontItalic);
 		usercode.setColumns(10);
 		frame.getContentPane().add(usercode);
 
 		// Algorithm's
-		JLabel algorithm = new JLabel(Resources.Localization.Algoritms.ALGORITHM_FOR_SEARCH);
+		JLabel algorithm = new JLabel(Resources.Localization.Algoritms.ALGORITHM_FOR_SEARCH.toUpperCase());
+		algorithm.setForeground(Resources.Colors.CYAN);
 		algorithm.setFont(fontRegular);
-		algorithm.setBounds(10, 197, 170, 20);
+		algorithm.setBounds(10, 197, 190, 20);
 		frame.getContentPane().add(algorithm);
 
 		algorithms = new JComboBox<String>();
+		algorithms.setBackground(Resources.Colors.WHITE);
 		algorithms.setEditable(false);
 		algorithms.setModel(new DefaultComboBoxModel(new String[] { Resources.Localization.Algoritms.RANDOM_ALGORITHM, Resources.Localization.Algoritms.BOB_ALGORITHM, Resources.Localization.Algoritms.MAGIC_ALGORITHM }));
 		algorithms.setFont(fontItalic);
-		algorithms.setBounds(10, 228, 170, 20);
+		algorithms.setBounds(10, 228, 190, 20);
 		frame.getContentPane().add(algorithms);
 
 		// Start button
-		start = new JButton(Resources.Localization.START_SEARCHING);
+		start = new JButton(Resources.Localization.START_SEARCHING.toUpperCase());
+		start.setBackground(Resources.Colors.CYAN);
+		start.setForeground(Resources.Colors.WHITE);
 		start.setFont(fontItalic);
 		start.addMouseListener(new MouseAdapter() {
 			@Override
@@ -225,14 +235,15 @@ public class GUi {
 				}
 			}
 		});
-		start.setBounds(10, 310, 170, 50);
+		start.setBounds(10, 310, 190, 50);
 		frame.getContentPane().add(start);
 
 		// Bot code
 		botCode = new JLabel("0000");
+		botCode.setForeground(Resources.Colors.CYAN);
 		botCode.setHorizontalAlignment(SwingConstants.CENTER);
 		botCode.setFont(fontBig);
-		botCode.setBounds(261, 42, 220, 89);
+		botCode.setBounds(261, 52, 220, 89);
 		frame.getContentPane().add(botCode);
 
 		// I think, it's...
@@ -250,7 +261,9 @@ public class GUi {
 		frame.getContentPane().add(attempt);
 
 		// Get Random Code
-		randomButton = new JButton(Resources.Localization.RANDOM_BUTTON);
+		randomButton = new JButton(Resources.Localization.RANDOM_BUTTON.toUpperCase());
+		randomButton.setBackground(Resources.Colors.CYAN);
+		randomButton.setForeground(Resources.Colors.WHITE);
 		randomButton.setFont(fontItalic);
 		randomButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -260,8 +273,29 @@ public class GUi {
 				}
 			}
 		});
-		randomButton.setBounds(10, 269, 170, 30);
+		randomButton.setBounds(10, 269, 190, 30);
 		frame.getContentPane().add(randomButton);
+		
+		
+        String[] columnNames = {
+                "Попытка",
+                "Код",
+                "Ответ"
+      };
+       
+      String[][] data = {
+    		  {"0", "-", "-" ,"-"}
+      };
+       
+      JTable table = new JTable(data, columnNames);
+      table.setEnabled(false);
+      table.setToolTipText(Localization.UNAVAILABLE);
+       
+      JScrollPane scrollPane = new JScrollPane(table);
+      scrollPane.setBounds(241, 186, 280, 174);
+      scrollPane.setEnabled(false);
+      scrollPane.setToolTipText(Localization.UNAVAILABLE);
+      frame.getContentPane().add(scrollPane);
 	}
 
 	/**
@@ -282,7 +316,7 @@ public class GUi {
 		run = false;
 		sf.cancel(false);
 		GameUtils.shutdownExecutor(true);
-		start.setText(Resources.Localization.START_SEARCHING);
+		start.setText(Resources.Localization.START_SEARCHING.toUpperCase());
 	}
 
 	/**
@@ -313,7 +347,7 @@ public class GUi {
 		}
 
 		// Start searching
-		start.setText(Resources.Localization.STOP_SEARCHING);
+		start.setText(Resources.Localization.STOP_SEARCHING.toUpperCase());
 		if (algorithms.getSelectedItem().equals(Resources.Localization.Algoritms.RANDOM_ALGORITHM)) {
 			finder = new RandomFinder();
 		} else if (algorithms.getSelectedItem().equals(Resources.Localization.Algoritms.BOB_ALGORITHM)) {

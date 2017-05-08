@@ -50,15 +50,14 @@ import ru.beykerykt.bullsandcows.implementation.Resources.Localization;
 
 public class GUi {
 
-	private JFrame frame;
-
 	// Fonts
 	private GraphicsEnvironment environment;
 	private Font fontBig;
 	private Font fontRegular;
 	private Font fontItalic;
 
-	// Swing
+	// Swing / AWT
+	private JFrame frame;
 	private JTextField usercode;
 	private JTextField pName;
 	private JTextField bName;
@@ -278,7 +277,6 @@ public class GUi {
 
 		// Enable algorithms list
 		algorithms.setEnabled(true);
-		algorithms.setEditable(true);
 
 		// Shutdown
 		run = false;

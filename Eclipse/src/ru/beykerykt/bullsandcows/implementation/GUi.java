@@ -275,27 +275,20 @@ public class GUi {
 		});
 		randomButton.setBounds(10, 269, 190, 30);
 		frame.getContentPane().add(randomButton);
-		
-		
-        String[] columnNames = {
-                "Попытка",
-                "Код",
-                "Ответ"
-      };
-       
-      String[][] data = {
-    		  {"0", "-", "-" ,"-"}
-      };
-       
-      JTable table = new JTable(data, columnNames);
-      table.setEnabled(false);
-      table.setToolTipText(Localization.UNAVAILABLE);
-       
-      JScrollPane scrollPane = new JScrollPane(table);
-      scrollPane.setBounds(241, 186, 280, 174);
-      scrollPane.setEnabled(false);
-      scrollPane.setToolTipText(Localization.UNAVAILABLE);
-      frame.getContentPane().add(scrollPane);
+
+		String[] columnNames = { "Попытка", "Код", "Ответ" };
+
+		String[][] data = { { "0", "-", "-", "-" } };
+
+		JTable table = new JTable(data, columnNames);
+		table.setEnabled(false);
+		table.setToolTipText(Localization.UNAVAILABLE);
+
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBounds(241, 186, 280, 174);
+		scrollPane.setEnabled(false);
+		scrollPane.setToolTipText(Localization.UNAVAILABLE);
+		frame.getContentPane().add(scrollPane);
 	}
 
 	/**

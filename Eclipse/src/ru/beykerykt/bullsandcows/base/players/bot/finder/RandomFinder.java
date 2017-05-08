@@ -21,30 +21,37 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 **/
-package ru.beykerykt.bullsandcows.base.gui;
+package ru.beykerykt.bullsandcows.base.players.bot.finder;
 
-public class NullInterface implements IUserInterface {
+import java.util.List;
+import java.util.Random;
+
+import ru.beykerykt.bullsandcows.base.utils.GameUtils;
+
+public class RandomFinder implements CodeFinder {
+
+	protected List<String> allCodes;
+	protected Random rand = new Random();
+	protected String lastCode;
 
 	@Override
-	public void showText(String text) {
-		// TODO Auto-generated method stub
+	public String getGuessCode() {
+		lastCode = allCodes.get(rand.nextInt(allCodes.size()));
+		return lastCode;
 	}
 
 	@Override
-	public String getInput() {
-		return "";
+	public void reset() {
+		this.allCodes.clear();
+		this.allCodes = GameUtils.getAllCodes(GameUtils.CODE_POWER_LENGTH);
 	}
 
 	@Override
-	public void onPlayerJoin() {
-		// TODO Auto-generated method stub
-
+	public void onReceivingResponse(String response) {
+		// return "0:0"
+		if (allCodes.contains(lastCode)) {
+			allCodes.remove(lastCode);
+		}
+		System.out.println("Size: " + allCodes.size());
 	}
-
-	@Override
-	public void onPlayerLeave() {
-		// TODO Auto-generated method stub
-
-	}
-
 }

@@ -27,7 +27,7 @@ import java.util.Random;
 
 import ru.beykerykt.bullsandcows.base.gui.NullInterface;
 import ru.beykerykt.bullsandcows.base.players.BasePlayer;
-import ru.beykerykt.bullsandcows.base.players.bot.finder.BobFinder;
+import ru.beykerykt.bullsandcows.base.players.bot.finder.bob.BobFinder;
 import ru.beykerykt.bullsandcows.base.players.bot.finder.CodeFinder;
 
 public class BotPlayer extends BasePlayer {

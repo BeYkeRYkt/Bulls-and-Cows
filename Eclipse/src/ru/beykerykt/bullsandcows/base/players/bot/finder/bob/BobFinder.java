@@ -21,36 +21,54 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 **/
-package ru.beykerykt.bullsandcows.base.players.bot.finder;
+package ru.beykerykt.bullsandcows.base.players.bot.finder.bob;
 
-import java.util.List;
-import java.util.Random;
+import java.util.Arrays;
 
+import ru.beykerykt.bullsandcows.base.players.bot.finder.RandomFinder;
 import ru.beykerykt.bullsandcows.base.utils.GameUtils;
 
-public class BobFinder implements CodeFinder {
-
-	private List<String> allCodes;
-	private Random rand = new Random();
-	private String lastCode;
+public class BobFinder extends RandomFinder {
 
 	@Override
 	public String getGuessCode() {
-		lastCode = allCodes.get(rand.nextInt(allCodes.size()));
+		lastCode = getG(GameUtils.CODE_POWER_LENGTH);
 		return lastCode;
 	}
 
 	@Override
-	public void reset() {
-		this.allCodes = GameUtils.getAllCodes(GameUtils.CODE_POWER_LENGTH);
+	public void onReceivingResponse(String response) {
+		if (response.equals("0:0")) {
+			if (allCodes.contains(lastCode)) {
+				allCodes.remove(lastCode);
+			}
+		}
+		System.out.println(response);
+		System.out.println("Size: " + allCodes.size());
+		System.out.println(allCodes.get(0).length());
+		String[] a = lastCode.split("");
+		showPermutations(a);
 	}
 
-	@Override
-	public void onReceivingResponse(String response) {
-		// return "0:0"
-		if (allCodes.contains(lastCode)) {
-			allCodes.remove(lastCode);
+	static void showPermutations(String[] arr) {
+		for (int i = 0; i < arr.length; i++) {
+			for (int j = 0; j < arr.length - 1; j++) {
+				System.out.println(Arrays.toString(arr));
+				String tmp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = tmp;
+			}
 		}
-		System.out.println("Size: " + allCodes.size());
 	}
+
+	public String getG(int length) {
+		int randInt = rand.nextInt(length);
+		for (String code : allCodes) {
+			if (code.contains(String.valueOf(randInt) + String.valueOf(randInt))) {
+				return code;
+			}
+		}
+		return lastCode;
+	}
+
 }

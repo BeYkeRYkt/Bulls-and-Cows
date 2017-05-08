@@ -96,7 +96,7 @@ public class BattleArena implements Runnable {
 			}
 
 			timerR.stop();
-			GameUtils.getExecutorService().shutdownNow(); // TEST
+			GameUtils.shutdownExecutor(true);
 		}
 	}
 
@@ -200,6 +200,30 @@ public class BattleArena implements Runnable {
 	/////////////////////////////////////////////////////////////////////
 	public List<IRunnable> getRunnables() {
 		return runnables;
+	}
+
+	public void addRunnable(IRunnable runnable, boolean startAfter) {
+		runnables.add(runnable);
+
+		if (startAfter && isRunning()) {
+			runnable.start();
+		}
+	}
+
+	public IRunnable getRunnable(String name) {
+		for (IRunnable run : getRunnables()) {
+			if (run.getName().equals(name)) {
+				return run;
+			}
+		}
+		return null;
+	}
+
+	public void removeRunnable(IRunnable runnable) {
+		if (getRunnables().contains(runnable)) {
+			runnable.stop();
+			getRunnables().remove(runnable);
+		}
 	}
 
 	@Override

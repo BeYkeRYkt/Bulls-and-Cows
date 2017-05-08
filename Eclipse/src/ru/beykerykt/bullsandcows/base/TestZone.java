@@ -36,8 +36,8 @@ public class TestZone {
 			BasePlayer player = new HumanPlayer("DevelopedOne", GameUtils.generateRandomCode(), new PrintStreamInterface(System.out));
 			BasePlayer bot = new BotPlayer("Bob", GameUtils.generateRandomCode());
 
-			BattleArena arena = new BattleArena("Test");
-			arena.getRunnables().add(new PlayerRunnable(arena));
+			BattleArena arena = new BattleArena("TestArena");
+			arena.addRunnable(new PlayerRunnable(arena), false);
 			arena.addPlayer(player);
 			arena.addPlayer(bot);
 			arena.start();

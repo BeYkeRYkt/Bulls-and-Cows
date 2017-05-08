@@ -108,8 +108,6 @@ public abstract class BasePlayer {
 			entry.setGuessed(true);
 			getUserInterface().showText("You won!");
 		}
-		
-		getUserInterface().showText(entry.getLastResponse());
 	}
 
 	public String getHint(String guessFromAnotherPlayer) {
@@ -127,10 +125,10 @@ public abstract class BasePlayer {
 				cows++;
 			}
 		}
-		// System.out.println(cows + " Cows and " + bulls + " Bulls.");
 		if (bulls == getSecretCode().length()) {
 			return "WON";
 		}
+		// System.out.println(cows + " Cows and " + bulls + " Bulls.");
 		return bulls + ":" + cows;
 	}
 

@@ -42,7 +42,7 @@ public class PrintStreamInterface implements IUserInterface {
 
 	@Override
 	public String getInput() {
-		return "1111";
+		return "1111"; // input.next();
 	}
 
 	@Override

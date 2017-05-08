@@ -32,7 +32,7 @@ import ru.beykerykt.bullsandcows.base.players.OpponentInfo;
 public class PlayerRunnable extends BattleArenaRunnable {
 
 	public PlayerRunnable(BattleArena arena) {
-		super("players", arena, 1, TimeUnit.MILLISECONDS);
+		super("players", arena, 1000, TimeUnit.MILLISECONDS);
 	}
 
 	@Override

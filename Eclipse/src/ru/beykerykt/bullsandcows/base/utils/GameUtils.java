@@ -35,11 +35,18 @@ public class GameUtils {
 	public static int CODE_POWER[] = { 0, 1, 2, 3, 4, 5, 6 };
 	public static int CODE_POWER_LENGTH = CODE_POWER.length;
 	public static int CODE_LENGTH = 4;
+	public static int ADDITIONAL_CORES = 1;
+
+	private static boolean shutdown;
 
 	public static String generateRandomCode() {
 		Random rand = new Random();
 		List<String> allCodes = getAllCodes(CODE_POWER_LENGTH);
 		return allCodes.get(rand.nextInt(allCodes.size()));
+	}
+
+	public static String valueOf(int i) {
+		return String.valueOf(i);
 	}
 
 	public static List<String> getAllCodes(int length) {
@@ -48,7 +55,7 @@ public class GameUtils {
 			for (int j = 0; j < length; j++) {
 				for (int k = 0; k < length; k++) {
 					for (int l = 0; l < length; l++) {
-						String code = String.valueOf("" + i + j + k + l);
+						String code = valueOf(i) + valueOf(j) + valueOf(k) + valueOf(l);
 						list.add(code);
 					}
 				}
@@ -57,9 +64,20 @@ public class GameUtils {
 		return list;
 	}
 
+	public static boolean isExecutorShutdown() {
+		return shutdown;
+	}
+
+	public static void shutdownExecutor(boolean flag) {
+		shutdown = flag;
+		if (flag) {
+			getExecutorService().shutdownNow();
+		}
+	}
+
 	public static ScheduledExecutorService getExecutorService() {
-		if (es == null || es.isShutdown()) {
-			es = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
+		if ((es == null || es.isShutdown()) && !isExecutorShutdown()) {
+			es = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() + ADDITIONAL_CORES);
 		}
 		return es;
 	}

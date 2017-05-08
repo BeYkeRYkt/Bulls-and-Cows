@@ -21,30 +21,61 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 **/
-package ru.beykerykt.bullsandcows.base.gui;
+package ru.beykerykt.bullsandcows.base.players.bot.finder.bob;
 
-public class NullInterface implements IUserInterface {
+public class CodeGuess {
 
-	@Override
-	public void showText(String text) {
-		// TODO Auto-generated method stub
+	private int bulls;
+	private int cows;
+
+	public CodeGuess(int bulls, int cows) {
+		this.bulls = bulls;
+		this.cows = cows;
+	}
+
+	public int getBulls() {
+		return bulls;
+	}
+
+	public int getCows() {
+		return cows;
+	}
+
+	public void tickBulls() {
+		bulls++;
+	}
+
+	public void tickCows() {
+		cows++;
 	}
 
 	@Override
-	public String getInput() {
-		return "";
+	public String toString() {
+		return bulls + " " + cows;
 	}
 
 	@Override
-	public void onPlayerJoin() {
-		// TODO Auto-generated method stub
-
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + bulls;
+		result = prime * result + cows;
+		return result;
 	}
 
 	@Override
-	public void onPlayerLeave() {
-		// TODO Auto-generated method stub
-
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CodeGuess other = (CodeGuess) obj;
+		if (bulls != other.bulls)
+			return false;
+		if (cows != other.cows)
+			return false;
+		return true;
 	}
-
 }

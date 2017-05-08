@@ -72,4 +72,40 @@ public abstract class BattleArenaRunnable implements IRunnable {
 		return arena;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((arena == null) ? 0 : arena.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + (int) (period ^ (period >>> 32));
+		result = prime * result + ((timeUnit == null) ? 0 : timeUnit.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BattleArenaRunnable other = (BattleArenaRunnable) obj;
+		if (arena == null) {
+			if (other.arena != null)
+				return false;
+		} else if (!arena.equals(other.arena))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (period != other.period)
+			return false;
+		if (timeUnit != other.timeUnit)
+			return false;
+		return true;
+	}
 }

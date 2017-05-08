@@ -23,6 +23,8 @@
 **/
 package ru.beykerykt.bullsandcows.implementation;
 
+import java.awt.Color;
+
 public class Resources {
 
 	public static class Localization {
@@ -62,5 +64,10 @@ public class Resources {
 		// Fonts
 		public static String REGULAR_FONT_PATH = "/res/fonts/Lato-Regular.ttf";
 		public static String ITALIC_FONT_PATH = "/res/fonts/Lato-Italic.ttf";
+	}
+
+	public static class Colors {
+		public static Color WHITE = Color.WHITE; // background ?
+		public static Color CYAN = new Color(0, 177, 229); // cyanogen
 	}
 }

@@ -42,7 +42,9 @@ public class RandomFinder implements CodeFinder {
 
 	@Override
 	public void reset() {
-		this.allCodes.clear();
+		if (this.allCodes != null) {
+			this.allCodes.clear();
+		}
 		this.allCodes = GameUtils.getAllCodes(GameUtils.CODE_POWER_LENGTH);
 	}
 

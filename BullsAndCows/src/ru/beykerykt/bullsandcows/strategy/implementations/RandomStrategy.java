@@ -21,23 +21,27 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 **/
-package ru.beykerykt.bullsandcows.base.strategy;
+package ru.beykerykt.bullsandcows.strategy.implementations;
 
-import java.util.List;
+import java.util.Random;
 
-import ru.beykerykt.bullsandcows.base.GameUtils;
+import ru.beykerykt.bullsandcows.strategy.BaseStrategy;
 
-public abstract class BaseStrategy implements IStrategy {
+public class RandomStrategy extends BaseStrategy {
 
-	protected List<String> allCodes; // Все возможные варианты
-	protected String lastCode; // Последняя проба
+	protected Random rand = new Random();
 
 	@Override
-	public void reset() {
-		this.lastCode = null;
-		if (this.allCodes != null) {
-			this.allCodes.clear();
+	public String getGuessCode() {
+		lastCode = allCodes.get(rand.nextInt(allCodes.size()));
+		return lastCode;
+	}
+
+	@Override
+	public void onReceivingResponse(String response) {
+		// return "0:0"
+		if (allCodes.contains(lastCode)) {
+			allCodes.remove(lastCode);
 		}
-		this.allCodes = GameUtils.getAllCodes(GameUtils.CODE_POWER_LENGTH);
 	}
 }

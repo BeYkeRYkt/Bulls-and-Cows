@@ -1,6 +1,6 @@
-package ru.beykerykt.bullsandcows.base.strategy.implementations;
+package ru.beykerykt.bullsandcows.strategy.implementations;
 
-import ru.beykerykt.bullsandcows.base.strategy.IStrategy;
+import ru.beykerykt.bullsandcows.strategy.IStrategy;
 
 public class MagicStrategy implements IStrategy{
 

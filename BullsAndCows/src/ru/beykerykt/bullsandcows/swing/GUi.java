@@ -46,11 +46,12 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import ru.beykerykt.bullsandcows.base.GameUtils;
-import ru.beykerykt.bullsandcows.base.strategy.IStrategy;
-import ru.beykerykt.bullsandcows.base.strategy.implementations.BobStrategy;
-import ru.beykerykt.bullsandcows.base.strategy.implementations.MagicStrategy;
-import ru.beykerykt.bullsandcows.base.strategy.implementations.RandomStrategy;
+import ru.beykerykt.bullsandcows.GameUtils;
+import ru.beykerykt.bullsandcows.Resources;
+import ru.beykerykt.bullsandcows.strategy.IStrategy;
+import ru.beykerykt.bullsandcows.strategy.implementations.BobStrategy;
+import ru.beykerykt.bullsandcows.strategy.implementations.MagicStrategy;
+import ru.beykerykt.bullsandcows.strategy.implementations.RandomStrategy;
 
 public class GUi {
 

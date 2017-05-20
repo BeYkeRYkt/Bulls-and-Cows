@@ -21,12 +21,12 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 **/
-package ru.beykerykt.bullsandcows.base.strategy.implementations;
+package ru.beykerykt.bullsandcows.strategy.implementations;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.beykerykt.bullsandcows.base.GameUtils;
+import ru.beykerykt.bullsandcows.GameUtils;
 
 public class BobStrategy extends RandomStrategy {
 

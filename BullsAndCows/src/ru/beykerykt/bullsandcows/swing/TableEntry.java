@@ -21,25 +21,28 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 **/
-package ru.beykerykt.bullsandcows.base.players.bot.finder;
+package ru.beykerykt.bullsandcows.swing;
 
-import java.util.Random;
+public class TableEntry {
+	private final int attempt;
+	private final String guess;
+	private final String response;
 
-public class RandomFinder extends BaseFinder {
-
-	protected Random rand = new Random();
-
-	@Override
-	public String getGuessCode() {
-		lastCode = allCodes.get(rand.nextInt(allCodes.size()));
-		return lastCode;
+	public TableEntry(int attempt, String guess, String response) {
+		this.attempt = attempt;
+		this.guess = guess;
+		this.response = response;
 	}
 
-	@Override
-	public void onReceivingResponse(String response) {
-		// return "0:0"
-		if (allCodes.contains(lastCode)) {
-			allCodes.remove(lastCode);
-		}
+	public int getAttempt() {
+		return attempt;
+	}
+
+	public String getGuess() {
+		return guess;
+	}
+
+	public String getResponse() {
+		return response;
 	}
 }

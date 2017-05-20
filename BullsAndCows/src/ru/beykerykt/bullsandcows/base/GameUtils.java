@@ -21,7 +21,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 **/
-package ru.beykerykt.bullsandcows.base.utils;
+package ru.beykerykt.bullsandcows.base;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class GameUtils {
 	public static int CODE_POWER[] = { 0, 1, 2, 3, 4, 5, 6 };
 	public static int CODE_POWER_LENGTH = CODE_POWER.length;
 	public static int CODE_LENGTH = 4;
-	public static int ADDITIONAL_CORES = 1;
+	public static int ADDITIONAL_CORES = 0;
 
 	private static boolean shutdown;
 
@@ -45,17 +45,13 @@ public class GameUtils {
 		return allCodes.get(rand.nextInt(allCodes.size()));
 	}
 
-	private static String valueOf(int i) {
-		return String.valueOf(i);
-	}
-
 	public static List<String> getAllCodes(int length) {
 		List<String> list = new ArrayList<String>();
 		for (int i = 0; i < length; i++) {
 			for (int j = 0; j < length; j++) {
 				for (int k = 0; k < length; k++) {
 					for (int l = 0; l < length; l++) {
-						String code = valueOf(i) + valueOf(j) + valueOf(k) + valueOf(l);
+						String code = String.valueOf(i) + String.valueOf(j) + String.valueOf(k) + String.valueOf(l);
 						list.add(code);
 					}
 				}
@@ -82,23 +78,32 @@ public class GameUtils {
 		return es;
 	}
 
-	public static List<String> getP(String code) {
-		List<String> list = new ArrayList<String>();
-		shift(code, code.length(), list, new StringBuffer());
-		return list;
-	}
+	public static String getHint(String secret, String guess) {
+		int s = 0;
+		int g = 0;
 
-	private static void shift(String s, int length, List<String> list, StringBuffer res) {
-		if (length == 0) {
-			if (!list.contains(res.toString())) {
-				list.add(res.toString());
-			}
-		} else {
-			for (int i = 0; i < s.length(); i++) {
-				String news = s.substring(0, i) + s.substring(i + 1, s.length());
-				String simb = s.substring(i, i + 1);
-				shift(news, length - 1, list, (new StringBuffer(res)).append(simb));
+		int[] num = new int[CODE_POWER_LENGTH];
+		int bulls = 0;
+		int cows = 0;
+		for (int k = 0; k < secret.length(); k++) {
+			s = secret.charAt(k) - 48;
+			g = guess.charAt(k) - 48;
+			if (s == g) {
+				bulls++;
+			} else {
+				if (num[s] < 0) {
+					cows++;
+				}
+				if (num[g] > 0) {
+					cows++;
+				}
+				num[s]++;
+				num[g]--;
 			}
 		}
+		if (bulls == 4) {
+			return "WON";
+		}
+		return bulls + ":" + cows;
 	}
 }

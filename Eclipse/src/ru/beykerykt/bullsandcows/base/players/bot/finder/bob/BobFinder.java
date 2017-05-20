@@ -23,12 +23,25 @@
 **/
 package ru.beykerykt.bullsandcows.base.players.bot.finder.bob;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import ru.beykerykt.bullsandcows.base.players.bot.finder.RandomFinder;
 import ru.beykerykt.bullsandcows.base.utils.GameUtils;
 
 public class BobFinder extends RandomFinder {
+
+	private String possibleCode; // G(i)
+	private List<String> possibleCodes; // P(i)
+
+	@Override
+	public void reset() {
+		super.reset();
+		if (possibleCodes != null) {
+			possibleCodes.clear();
+		}
+		possibleCodes = new ArrayList<String>();
+	}
 
 	@Override
 	public String getGuessCode() {
@@ -38,37 +51,53 @@ public class BobFinder extends RandomFinder {
 
 	@Override
 	public void onReceivingResponse(String response) {
+		// response - R(i)
 		if (response.equals("0:0")) {
-			if (allCodes.contains(lastCode)) {
-				allCodes.remove(lastCode);
+			List<String> P = GameUtils.getP(lastCode);
+			for (String s : P) {
+				if (allCodes.contains(s)) {
+					allCodes.remove(s);
+				}
 			}
+			return;
+		} else {
+
 		}
-		System.out.println(response);
-		System.out.println("Size: " + allCodes.size());
-		System.out.println(allCodes.get(0).length());
-		String[] a = lastCode.split("");
-		showPermutations(a);
+
+		if (allCodes.contains(lastCode)) {
+			allCodes.remove(lastCode);
+		}
 	}
 
-	static void showPermutations(String[] arr) {
-		for (int i = 0; i < arr.length; i++) {
-			for (int j = 0; j < arr.length - 1; j++) {
-				System.out.println(Arrays.toString(arr));
-				String tmp = arr[j];
-				arr[j] = arr[j + 1];
-				arr[j + 1] = tmp;
-			}
-		}
-	}
+	private boolean triggered;
 
 	public String getG(int length) {
-		int randInt = rand.nextInt(length);
-		for (String code : allCodes) {
-			if (code.contains(String.valueOf(randInt) + String.valueOf(randInt))) {
-				return code;
-			}
+		if (!possibleCodes.isEmpty()) {
+			return possibleCodes.get(0);
 		}
-		return lastCode;
+
+		if (!triggered) {
+			return getDoubleG(); // get random double g
+		} else {
+			return allCodes.get(0);
+		}
 	}
 
+	private String getDoubleG() {
+		List<String> list = new ArrayList<String>();
+		for (int i = 0; i < GameUtils.CODE_POWER_LENGTH; i++) {
+			for (String code : allCodes) {
+				if (code.contains(String.valueOf(i) + String.valueOf(i))) {
+					list.add(code);
+				}
+			}
+		}
+		return getRandomValue(list);
+	}
+
+	private String getRandomValue(List<String> list) {
+		int index = rand.nextInt(list.size());
+		System.out.println(list.get(index));
+		return list.get(index);
+	}
 }

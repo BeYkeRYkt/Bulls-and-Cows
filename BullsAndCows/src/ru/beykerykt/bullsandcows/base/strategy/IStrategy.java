@@ -21,25 +21,16 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 **/
-package ru.beykerykt.bullsandcows.base.players.bot.finder;
+package ru.beykerykt.bullsandcows.base.strategy;
 
-import java.util.Random;
+public interface IStrategy {
 
-public class RandomFinder extends BaseFinder {
+	// Сброс параметров
+	public void reset();
 
-	protected Random rand = new Random();
+	// Получение пробы
+	public String getGuessCode();
 
-	@Override
-	public String getGuessCode() {
-		lastCode = allCodes.get(rand.nextInt(allCodes.size()));
-		return lastCode;
-	}
-
-	@Override
-	public void onReceivingResponse(String response) {
-		// return "0:0"
-		if (allCodes.contains(lastCode)) {
-			allCodes.remove(lastCode);
-		}
-	}
+	// Получение результата проба
+	public void onReceivingResponse(String response);
 }

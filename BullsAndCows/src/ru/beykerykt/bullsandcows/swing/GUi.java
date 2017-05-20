@@ -21,7 +21,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 **/
-package ru.beykerykt.bullsandcows.implementation;
+package ru.beykerykt.bullsandcows.swing;
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -30,6 +30,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -44,11 +46,11 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import ru.beykerykt.bullsandcows.base.players.bot.finder.CodeFinder;
-import ru.beykerykt.bullsandcows.base.players.bot.finder.RandomFinder;
-import ru.beykerykt.bullsandcows.base.players.bot.finder.bob.BobFinder;
-import ru.beykerykt.bullsandcows.base.utils.GameUtils;
-import ru.beykerykt.bullsandcows.implementation.Resources.Localization;
+import ru.beykerykt.bullsandcows.base.GameUtils;
+import ru.beykerykt.bullsandcows.base.strategy.IStrategy;
+import ru.beykerykt.bullsandcows.base.strategy.implementations.BobStrategy;
+import ru.beykerykt.bullsandcows.base.strategy.implementations.MagicStrategy;
+import ru.beykerykt.bullsandcows.base.strategy.implementations.RandomStrategy;
 
 public class GUi {
 
@@ -68,9 +70,11 @@ public class GUi {
 	private JLabel botCode;
 	private JButton randomButton;
 	private JLabel attempt;
+	private JTable table;
+	private ArrayTableModel tableModel;
 
 	// GameBase
-	private CodeFinder finder;
+	private IStrategy strategy;
 	private int guesses = 0;
 
 	private boolean run = false;
@@ -131,7 +135,7 @@ public class GUi {
 
 		// Frame
 		frame = new JFrame();
-		frame.setTitle(Localization.TITLE_NAME + " [" + Localization.STAGE_VERSION + "]");
+		frame.setTitle(Resources.Localization.TITLE_NAME + " [" + Resources.Localization.STAGE_VERSION + "]");
 		try {
 			frame.setIconImage(ImageIO.read(getClass().getResourceAsStream(Resources.ResourcePaths.ICON_PATH)));
 		} catch (IOException e) {
@@ -160,11 +164,11 @@ public class GUi {
 		pName = new JTextField();
 		pName.setEnabled(false);
 		pName.setEditable(false);
-		pName.setToolTipText(Localization.UNAVAILABLE);
+		pName.setToolTipText(Resources.Localization.UNAVAILABLE);
 		pName.setFont(fontItalic);
 		pName.setBounds(10, 42, 190, 20);
 		pName.setColumns(10);
-		pName.setText(Localization.PLAYER_DEFAULT_NAME);
+		pName.setText(Resources.Localization.PLAYER_DEFAULT_NAME);
 		frame.getContentPane().add(pName);
 
 		// Bot name
@@ -177,11 +181,11 @@ public class GUi {
 		bName = new JTextField();
 		bName.setEnabled(false);
 		bName.setEditable(false);
-		bName.setToolTipText(Localization.UNAVAILABLE);
+		bName.setToolTipText(Resources.Localization.UNAVAILABLE);
 		bName.setFont(fontItalic);
 		bName.setBounds(10, 104, 190, 20);
 		bName.setColumns(10);
-		bName.setText(Localization.BOT_DEFAULT_NAME);
+		bName.setText(Resources.Localization.BOT_DEFAULT_NAME);
 		frame.getContentPane().add(bName);
 
 		//////////////////////////////////////////////////////////////////////
@@ -191,15 +195,15 @@ public class GUi {
 		/////////////////////////////////////////////////////////////////////
 
 		// Usercode
-		JLabel yourCode = new JLabel(Localization.YOUR_CODE.toUpperCase());
+		JLabel yourCode = new JLabel(Resources.Localization.YOUR_CODE.toUpperCase());
 		yourCode.setForeground(Resources.Colors.CYAN);
-		yourCode.setToolTipText(Localization.YOUR_CODE_DESCRPTION);
+		yourCode.setToolTipText(Resources.Localization.YOUR_CODE_DESCRPTION);
 		yourCode.setFont(fontRegular);
 		yourCode.setBounds(10, 135, 190, 20);
 		frame.getContentPane().add(yourCode);
 
 		usercode = new JTextField();
-		usercode.setToolTipText(Localization.YOUR_CODE_DESCRPTION);
+		usercode.setToolTipText(Resources.Localization.YOUR_CODE_DESCRPTION);
 		usercode.setBounds(10, 166, 190, 20);
 		usercode.setFont(fontItalic);
 		usercode.setColumns(10);
@@ -215,7 +219,7 @@ public class GUi {
 		algorithms = new JComboBox<String>();
 		algorithms.setBackground(Resources.Colors.WHITE);
 		algorithms.setEditable(false);
-		algorithms.setModel(new DefaultComboBoxModel(new String[] { Resources.Localization.Algoritms.RANDOM_ALGORITHM, Resources.Localization.Algoritms.BOB_ALGORITHM, Resources.Localization.Algoritms.MAGIC_ALGORITHM }));
+		algorithms.setModel(new DefaultComboBoxModel(new String[] { Resources.Localization.Algoritms.BOB_ALGORITHM, Resources.Localization.Algoritms.RANDOM_ALGORITHM, Resources.Localization.Algoritms.MAGIC_ALGORITHM }));
 		algorithms.setFont(fontItalic);
 		algorithms.setBounds(10, 228, 190, 20);
 		frame.getContentPane().add(algorithms);
@@ -276,18 +280,17 @@ public class GUi {
 		randomButton.setBounds(10, 269, 190, 30);
 		frame.getContentPane().add(randomButton);
 
-		String[] columnNames = { "Попытка", "Код", "Ответ" };
-
-		String[][] data = { { "0", "-", "-", "-" } };
-
-		JTable table = new JTable(data, columnNames);
-		table.setEnabled(false);
-		table.setToolTipText(Localization.UNAVAILABLE);
+		// Table
+		List<TableEntry> list = new ArrayList<TableEntry>();
+		tableModel = new ArrayTableModel(list);
+		table = new JTable(tableModel);
+		// table.setEnabled(false);
+		// table.setToolTipText(Localization.UNAVAILABLE); - now it's available
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(241, 186, 280, 174);
 		scrollPane.setEnabled(false);
-		scrollPane.setToolTipText(Localization.UNAVAILABLE);
+		scrollPane.setToolTipText(Resources.Localization.UNAVAILABLE);
 		frame.getContentPane().add(scrollPane);
 	}
 
@@ -316,6 +319,10 @@ public class GUi {
 	 * Start
 	 */
 	public void start() {
+		// Clear table
+		tableModel.getList().clear();
+		tableModel.fireTableDataChanged();
+
 		// Disable random button
 		randomButton.setEnabled(false);
 
@@ -335,77 +342,66 @@ public class GUi {
 			usercode.setText(null);
 		}
 
-		if (usercode.getText().isEmpty() || usercode.getText().length() > 4) {
+		if (!isValidCode(usercode.getText())) {
 			usercode.setText(GameUtils.generateRandomCode()); // set random code
 		}
 
 		// Start searching
 		start.setText(Resources.Localization.STOP_SEARCHING.toUpperCase());
 		if (algorithms.getSelectedItem().equals(Resources.Localization.Algoritms.RANDOM_ALGORITHM)) {
-			finder = new RandomFinder();
+			strategy = new RandomStrategy();
 		} else if (algorithms.getSelectedItem().equals(Resources.Localization.Algoritms.BOB_ALGORITHM)) {
-			finder = new BobFinder();
+			strategy = new BobStrategy();
 		} else if (algorithms.getSelectedItem().equals(Resources.Localization.Algoritms.MAGIC_ALGORITHM)) {
-			// Fast implementation for Magic algorithm
-			finder = new CodeFinder() {
-
-				@Override
-				public void reset() {
-				}
-
-				@Override
-				public void onReceivingResponse(String response) {
-				}
-
-				@Override
-				public String getGuessCode() {
-					return usercode.getText();
-				}
-			};
+			strategy = new MagicStrategy(usercode.getText());
 		}
 		// Reset fields
 		guesses = 0;
-		finder.reset();
+		strategy.reset();
 
 		// Start thread
 		GameUtils.shutdownExecutor(false);
-		sf = GameUtils.getExecutorService().scheduleAtFixedRate(new Runnable() {
+		try {
+			sf = GameUtils.getExecutorService().scheduleAtFixedRate(new Runnable() {
 
-			@Override
-			public void run() {
-				String guess = finder.getGuessCode();
-				botCode.setText(guess);
-				guesses++;
-				attempt.setText(Resources.Localization.ATTEMPT + guesses);
-				String response = getHint(guess);
-				finder.onReceivingResponse(response);
-				if (response.equals("WON")) {
-					stop();
+				@Override
+				public void run() {
+					String guess = strategy.getGuessCode();
+					botCode.setText(guess);
+					guesses++;
+					attempt.setText(Resources.Localization.ATTEMPT + guesses);
+					String response = GameUtils.getHint(usercode.getText(), guess);
+					strategy.onReceivingResponse(response);
+
+					// editing table
+					tableModel.getList().add(new TableEntry(guesses, guess, response));
+					tableModel.fireTableDataChanged();
+
+					if (response.equals("WON")) {
+						stop();
+					}
 				}
-			}
-		}, 0, 5, TimeUnit.MILLISECONDS);
-		run = true;
+			}, 0, 5, TimeUnit.MILLISECONDS);
+			run = true;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			stop();
+		}
 	}
 
-	public String getHint(String guessFromAnotherPlayer) {
-		int bulls = 0;
-		int cows = 0;
-
-		if (guessFromAnotherPlayer.length() < GameUtils.CODE_LENGTH) {
-			return bulls + ":" + cows;
-		}
-
-		for (int i = 0; i < usercode.getText().length(); i++) {
-			if (guessFromAnotherPlayer.charAt(i) == usercode.getText().charAt(i)) {
-				bulls++;
-			} else if (usercode.getText().contains(guessFromAnotherPlayer.charAt(i) + "")) {
-				cows++;
+	private boolean isValidCode(String usercode) {
+		if (usercode == null || usercode.isEmpty() || usercode.length() != 4)
+			return false;
+		int code = Integer.parseInt(usercode);
+		while (code / 10 != 0) {
+			code = code / 10;
+			int v = code % 10;
+			for (int i = 0; i < GameUtils.CODE_POWER_LENGTH; i++) {
+				if (GameUtils.CODE_POWER[i] != v) {
+					return false;
+				}
 			}
 		}
-		if (bulls == usercode.getText().length()) {
-			return "WON";
-		}
-		// System.out.println(cows + " Cows and " + bulls + " Bulls.");
-		return bulls + ":" + cows;
+		return true;
 	}
 }

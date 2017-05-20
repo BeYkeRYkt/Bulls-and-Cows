@@ -21,25 +21,69 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 **/
-package ru.beykerykt.bullsandcows.base.players.bot.finder;
+package ru.beykerykt.bullsandcows.swing;
 
-import java.util.Random;
+import java.util.List;
 
-public class RandomFinder extends BaseFinder {
+import javax.swing.table.AbstractTableModel;
 
-	protected Random rand = new Random();
+public class ArrayTableModel extends AbstractTableModel {
 
-	@Override
-	public String getGuessCode() {
-		lastCode = allCodes.get(rand.nextInt(allCodes.size()));
-		return lastCode;
+	/**
+	 * AUTOGENERATE SERIAL UID
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private List<TableEntry> list;
+	private int COLUMN_COUNT = 3;
+
+	public ArrayTableModel(List<TableEntry> humans) {
+		super();
+		this.list = humans;
 	}
 
 	@Override
-	public void onReceivingResponse(String response) {
-		// return "0:0"
-		if (allCodes.contains(lastCode)) {
-			allCodes.remove(lastCode);
+	public int getRowCount() {
+		return list.size();
+	}
+
+	@Override
+	public int getColumnCount() {
+		return COLUMN_COUNT;
+	}
+
+	@Override
+	public String getColumnName(int c) {
+		String result = "";
+		switch (c) {
+			case 0:
+				result = "Попытка";
+				break;
+			case 1:
+				result = "Код";
+				break;
+			case 2:
+				result = "Ответ";
+				break;
 		}
+		return result;
+	}
+
+	@Override
+	public Object getValueAt(int r, int c) {
+		switch (c) {
+			case 0:
+				return list.get(r).getAttempt();
+			case 1:
+				return list.get(r).getGuess();
+			case 2:
+				return list.get(r).getResponse();
+			default:
+				return "";
+		}
+	}
+
+	public List<TableEntry> getList() {
+		return list;
 	}
 }

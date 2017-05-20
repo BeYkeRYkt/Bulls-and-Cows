@@ -21,11 +21,13 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 **/
-package ru.beykerykt.bullsandcows.base.players.bot.finder;
+package ru.beykerykt.bullsandcows.base.strategy.implementations;
 
 import java.util.Random;
 
-public class RandomFinder extends BaseFinder {
+import ru.beykerykt.bullsandcows.base.strategy.BaseStrategy;
+
+public class RandomStrategy extends BaseStrategy {
 
 	protected Random rand = new Random();
 

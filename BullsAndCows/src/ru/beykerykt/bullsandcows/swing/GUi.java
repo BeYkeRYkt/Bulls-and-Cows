@@ -394,15 +394,20 @@ public class GUi {
 		if (usercode == null || usercode.isEmpty() || usercode.length() != 4)
 			return false;
 		int code = Integer.parseInt(usercode);
-		while (code / 10 != 0) {
-			code = code / 10;
+		int trigger = 0;
+		for (int j = 0; j < usercode.length(); j++) {
 			int v = code % 10;
+			code = code / 10;
 			for (int i = 0; i < GameUtils.CODE_POWER_LENGTH; i++) {
-				if (GameUtils.CODE_POWER[i] != v) {
-					return false;
+				if (GameUtils.CODE_POWER[i] == v) {
+					trigger++;
+					break;
 				}
 			}
 		}
-		return true;
+		if (trigger == 4) {
+			return true;
+		}
+		return false;
 	}
 }
